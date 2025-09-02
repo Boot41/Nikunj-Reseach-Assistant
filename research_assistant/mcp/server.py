@@ -45,4 +45,5 @@ def get_weather(city: str) -> dict:
 
 
 if __name__ == "__main__":
+    # Always run in stdio mode for better compatibility
     app.run()
