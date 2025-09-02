@@ -3,7 +3,9 @@ import os
 from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioConnectionParams
-from google.adk.runners import run_interactive, run_step
+import subprocess
+import sys
+import atexit
 
 load_dotenv('/home/nikunjagrwl/Documents/Research-assistant/.env')
 api_key = os.getenv("GOOGLE_API_KEY")
