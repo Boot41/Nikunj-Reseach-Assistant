@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "research-assistant"
+version = "0.1.0"
+description = "A CLI tool for researchers to manage and analyze research papers."
+authors = [
+  { name="Nikunj", email="nikunj.agarwal@think41.com" },
+]
+dependencies = [
+    "fastmcp>=2.12.0",
+    "google-adk>=1.13.0",
+    "google-generativeai>=0.7.2",
+    "httpx>=0.28.1",
+    "python-dotenv>=1.0.1",
+    "rich>=14.1.0",
+    "typer>=0.17.3",
+    "uvicorn>=0.30.3",
+]
+
+[project.scripts]
+research-assistant = "research_assistant.cli.main:app"
+
