@@ -5,7 +5,9 @@ __pycache__/
 .env
 # C extensions
 *.so
-
+.logs
+.python-version
+.python-version
 # Distribution / packaging
 .Python
 build/

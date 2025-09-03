@@ -21,11 +21,11 @@ USER_ID = "cli_user"
 
 def start_chat_session():
     """Initializes the agent and runs an interactive chat session."""
-    console.print("[yellow]Initializing agent...[/yellow]")
+    # console.print("[yellow]Initializing agent...[/yellow]")
     agent = root_agent
     session_service = InMemorySessionService()
     runner = Runner(agent=agent, app_name=APP_NAME, session_service=session_service)
-    console.print("[green]✓ Agent initialized successfully[/green]")
+    # console.print("[green]✓ Agent initialized successfully[/green]")
 
     # The session service calls are async, so we need to run them in an event loop.
     session = asyncio.run(session_service.create_session(app_name=APP_NAME, user_id=USER_ID))
