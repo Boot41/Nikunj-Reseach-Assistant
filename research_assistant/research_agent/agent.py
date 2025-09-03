@@ -1,43 +1,3 @@
-# # agent.py
-
-# from google.adk.agents import Agent
-# from google.adk.tools.mcp_tool.mcp_toolset import McpToolset
-# from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
-# from mcp import StdioServerParameters
-
-# import warnings
-
-# warnings.filterwarnings(
-#     "ignore",
-#     message=r"\[EXPERIMENTAL\] BaseAuthenticatedTool.*",
-#     category=UserWarning
-# )
-
-
-# root_agent = Agent( 
-#     name="research_agent",
-#     model="gemini-1.5-flash",
-#     description="An agent that provides weather info.",
-#     instruction="""
-#     You are a helpful research assistant.
-#     When asked for a topic you tell the user about the research topic,
-#     and help him learn like a 5 year old. 
-#     """,
-#     tools=[
-#         McpToolset(
-#             connection_params=StdioConnectionParams(
-#                 server_params = StdioServerParameters(
-#                     command='/home/nikunjagrwl/Documents/Research-assistant/.venv/bin/python3', # Command to run your MCP server script
-#                     args=["/home/nikunjagrwl/Documents/Research-assistant/research_assistant/mcp/arxiv_server.py"], # Argument is the path to the script
-#                 )
-#             )
-#             # tool_filter=['load_web_page'] # Optional: ensure only specific tools are loaded
-#         )
-#     ],
-# )
-
-# agent.py
-
 import os
 import sys
 from google.adk.agents import Agent
@@ -74,7 +34,7 @@ warnings.filterwarnings(
 
 # Get absolute paths to avoid path issues
 BASE_DIR = "/home/nikunjagrwl/Documents/Research-assistant"
-VENV_PYTHON = os.path.join(BASE_DIR, ".venv", "bin", "python3")
+VENV_PYTHON = os.path.join(BASE_DIR, "venv", "bin", "python3")
 SERVER_SCRIPT = os.path.join(BASE_DIR, "research_assistant", "mcp", "arxiv_server.py")
 PARSER_SCRIPT = os.path.join(BASE_DIR, "research_assistant", "mcp", "pdf_parser.py")
 
@@ -93,7 +53,7 @@ logger.info(f"Using server script: {SERVER_SCRIPT}")
 try:
     root_agent = Agent( 
         name="research_agent",
-        model="gemini-1.5-flash",
+        model="gemini-2.5-flash-lite",
         description="An agent that provides research info from arXiv.",
         instruction="""
         You are a helpful research assistant that can search arXiv for academic papers.
@@ -134,29 +94,15 @@ try:
                 # Optional: specify which tools to load
                 # tool_filter=['search_tool', 'read_abstract_tool', 'list_recent_tool', 'download_pdf_tool']
             ),
-            McpToolset(
-                connection_params=StdioConnectionParams(
-                    server_params = StdioServerParameters(
-                        command=VENV_PYTHON,
-                        args=[PARSER_SCRIPT],
-                    )
-                ),
-                # Optional: specify which tools to load
-            ),
             # McpToolset(
             #     connection_params=StdioConnectionParams(
             #         server_params = StdioServerParameters(
-            #             command="npx",
-            #             args=["-y",
-            #                 "@modelcontextprotocol/server-filesystem",
-            #                 "/home/nikunjagrwl/Desktop",
-            #                 "/home/nikunjagrwl/Desktop/Reseaerch-assistant"
-            #             ],
+            #             command=VENV_PYTHON,
+            #             args=[PARSER_SCRIPT],
             #         )
-            #     )
+            #     ),
             #     # Optional: specify which tools to load
-            #     # tool_filter=['search_tool', 'read_abstract_tool', 'list_recent_tool', 'download_pdf_tool']
-            # )
+            # ),
         ],
     )
     

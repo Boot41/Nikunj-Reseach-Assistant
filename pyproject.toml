@@ -17,8 +17,10 @@ dependencies = [
     "google-generativeai>=0.7.2",
     "httpx>=0.28.1",
     "mcp>=1.13.1",
+    "mistune>=3.1.4",
     "netmind-parse-pdf-mcp>=0.1.0",
     "pdfplumber>=0.11.7",
+    "pymupdf>=1.26.4",
     "python-dotenv>=1.0.1",
     "requests>=2.32.5",
     "rich>=14.1.0",
@@ -29,3 +31,5 @@ dependencies = [
 [project.scripts]
 research-assistant = "research_assistant.cli.main:app"
 
+[tool.setuptools]
+packages = ["research_assistant"]
