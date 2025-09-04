@@ -4,7 +4,7 @@ import json
 from dotenv import load_dotenv
 import logging
 import signal
-import re
+from pathlib import Path
 
 from exceptiongroup import BaseExceptionGroup
 from mcp import types as mcp_types # Use alias to avoid conflict
@@ -37,66 +37,31 @@ server = Server('md_server')
 shutdown_event = asyncio.Event()
 
 
-def extract_sections_from_markdown(text: str) -> dict:
+def summarize_markdown_file(markdown_path: str) -> str:
     """
-    Extracts common sections from a markdown paper.
-    Looks for headers like Introduction, Methodology, Results, Conclusion.
+    Reads a Markdown file and summarizes its content.
+    Returns a concise summary suitable for presenting to the user.
     """
-    sections = {
-        "Introduction": "",
-        "Methodology": "",
-        "Results": "",
-        "Conclusion": ""
-    }
+    path = Path(markdown_path).expanduser().resolve() 
+    if not path.is_file():
+        raise FileNotFoundError(f"Markdown file not found: {markdown_path}")
 
-    current_section = None
-    buffer = []
+    # Read the markdown content
+    content = path.read_text(encoding="utf-8")
 
-    # Normalize headers (both '#' and '##')
-    lines = text.splitlines()
-    for line in lines:
-        header_match = re.match(r"^#+\s*(.+)", line.strip())
-        if header_match:
-            header = header_match.group(1).lower()
-            # Decide which section this belongs to
-            if "introduction" in header:
-                if current_section and buffer:
-                    sections[current_section] = "\n".join(buffer).strip()
-                buffer = []
-                current_section = "Introduction"
-            elif "method" in header or "methodology" in header:
-                if current_section and buffer:
-                    sections[current_section] = "\n".join(buffer).strip()
-                buffer = []
-                current_section = "Methodology"
-            elif "result" in header or "findings" in header:
-                if current_section and buffer:
-                    sections[current_section] = "\n".join(buffer).strip()
-                buffer = []
-                current_section = "Results"
-            elif "conclusion" in header or "discussion" in header:
-                if current_section and buffer:
-                    sections[current_section] = "\n".join(buffer).strip()
-                buffer = []
-                current_section = "Conclusion"
-            else:
-                # ignore other headers
-                if current_section and buffer:
-                    sections[current_section] = "\n".join(buffer).strip()
-                buffer = []
-                current_section = None
-        else:
-            if current_section:
-                buffer.append(line)
+    # Preprocess: remove excessive newlines
+    paragraphs = [p.strip() for p in content.split("\n\n") if p.strip()]
+    full_text = "\n".join(paragraphs)
 
-    # Capture trailing buffer
-    if current_section and buffer:
-        sections[current_section] = "\n".join(buffer).strip()
+    # For now, we can do a simple truncation for summary (or integrate with AI summarization later)
+    # Here we return the first ~500 words as a placeholder summary
+    words = full_text.split()
+    summary = " ".join(words)
 
-    return sections
+    return summary
 
 md_tools ={
-        "extract_sections_from_markdown": FunctionTool(extract_sections_from_markdown),
+        "summarize_markdown_file": FunctionTool(summarize_markdown_file),
 }
 
 @server.list_tools()

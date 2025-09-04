@@ -149,7 +149,7 @@ async def take_quiz(quiz_title: str, answers: List[int]):
 arxiv_tools ={
         "create_quiz": FunctionTool(create_quiz),
         "add_question": FunctionTool(add_question),
-        "take_quiz": FunctionTool(take_quiz),
+        #"take_quiz": FunctionTool(take_quiz),
 }
 
 @server.list_tools()
