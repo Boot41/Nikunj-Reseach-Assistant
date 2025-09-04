@@ -22,7 +22,6 @@ load_dotenv('/home/nikunjagrwl/Documents/Research-assistant/research_agent')
 log_dir = '/home/nikunjagrwl/Documents/Research-assistant/.logs'
 os.makedirs(log_dir, exist_ok=True)
 log_file = os.path.join(log_dir, "mcp_server.log")
-
 logging.basicConfig(
     level=logging.INFO,                    # Minimum log level
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -31,7 +30,6 @@ logging.basicConfig(
         # logging.StreamHandler()          # Remove StreamHandler to avoid terminal output
     ]
 )
-
 logger = logging.getLogger(__name__)
 
 server = Server('Arxiv_server')
@@ -91,7 +89,7 @@ async def download_pdf_tool(arxiv_id: str):
     try:
         search = arxiv.Search(id_list=[arxiv_id])
         result = next(search.results())
-        pdf_path = f"{arxiv_id.replace('/', '_')}.pdf"
+        pdf_path = "/home/nikunjagrwl/Documents/Research-assistant/downloads/" + f"{arxiv_id.replace('/', '_')}.pdf"
         result.download_pdf(filename=pdf_path)
         logger.info(f"Successfully downloaded PDF to '{pdf_path}'")
         return {"pdf_path": pdf_path}
