@@ -1,8 +1,29 @@
 {
-  "anafi_ros: from Off-the-Shelf Drones to Research Platforms": {
+  "Thermodynamics and Rate Thermodynamics": {
     "questions": []
   },
-  "New Drone Quiz": {
-    "questions": []
+  "EMF": {
+    "questions": [
+      {
+        "question": "Which of the following is a key characteristic that distinguishes 'tame fields' from 'defectless fields' in the context of valued fields?",
+        "options": [
+          "Tame fields have trivial value groups.",
+          "Tame fields have perfect residue fields and p-divisible value groups (where applicable).",
+          "Defectless fields are always a subclass of tame fields.",
+          "Tame fields are defined by their characteristic being zero."
+        ],
+        "answer": 3
+      },
+      {
+        "question": "What significant relationship does Theorem 1.2 in the paper establish?",
+        "options": [
+          "It proves that all tame fields are defectless.",
+          "It proves that all defectless fields are tame.",
+          "It establishes a connection between roughly tame fields and fields where all algebraic extensions are defectless.",
+          "It shows that tameness is a property of the value group alone."
+        ],
+        "answer": 2
+      }
+    ]
   }
 }
