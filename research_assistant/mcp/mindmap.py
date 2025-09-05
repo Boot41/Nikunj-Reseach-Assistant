@@ -36,7 +36,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger() 
 
-server = Server('Mindmap_server')
+server = Server('Mindmap_server')  # 30 second timeout for tool calls
 
 # Global flag to handle graceful shutdown
 shutdown_event = asyncio.Event()
@@ -60,19 +60,19 @@ def summarize_md(markdown_path: str) -> str:
     # For now, we can do a simple truncation for summary (or integrate with AI summarization later)
     # Here we return the first ~500 words as a placeholder summary
     words = full_text.split()
-    summary = " ".join(words)
+    summary = " ".join(words[:5000]) 
 
     return summary
 
-async def generate_mind_map(file_path: str):
+def generate_mindmap_tool(file_path: str):
     """
     Call Gemini model directly and return the combined text output.
     """
     text_content = summarize_md(file_path)
     client = genai.Client(http_options=HttpOptions(api_version="v1"))
     # The Google GenAI client is async-compatible if you wrap it in asyncio.to_thread
-    response = await asyncio.to_thread(client.models.generate_content,
-    model="gemini-2.5-flash",
+    response = client.models.generate_content(
+    model="gemini-1.5-flash",
     contents=f"""
         You are an AI assistant that generates a learning mind map.
         Read the given paper content and extract:
@@ -93,15 +93,15 @@ async def generate_mind_map(file_path: str):
         }}
 
         Paper content:
-        {text_content[:5000]}
+        {text_content}
         """,
     )
     response_text = response.text  # works in newer SDK
-    logger.info(f"Mind map generated successfully: {response_text}")
+    logger.info(f"Mind map generated successfully")
     return response_text
 
 mindmap_tools ={
-        "generate_mindmap_tool": FunctionTool(generate_mind_map),
+        "generate_mindmap_tool": FunctionTool(generate_mindmap_tool),
 }
 
 @server.list_tools()

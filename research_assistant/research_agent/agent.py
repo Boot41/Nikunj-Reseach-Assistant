@@ -85,7 +85,7 @@ You now have a `summarize_markdown_file` tool that can read a Markdown file and 
 3. Present the final summarized output to the user in a structured and readable format.  
 Do not attempt to summarize by reading sections manually or assuming content; always use the `summarize_markdown_file` tool followed by the LLM for the final output.
 
-You also have access to a `generate_mind_map` tool.  
+You also have access to a `generate_mindmap_tool` tool.  
 This tool takes as input the path to a Markdown file of a research paper (or notes) and returns a structured JSON object describing the topics, subtopics, and prerequisite knowledge required to understand the paper.  
 
 When using this tool, follow these rules:  
@@ -95,7 +95,7 @@ When using this tool, follow these rules:
    - Or if they ask "what topics do I need to know before reading this paper?"  
 
 2. **How to call**:  
-   - Pass the full Markdown file path of the converted paper into `generate_mind_map`.  
+   - Pass the full Markdown file path of the converted paper into `generate_mindmap_tool`.  
    - If the file is missing, first ensure it exists (convert the paper to Markdown if needed).  
 
 3. **Handling the result**:  
@@ -146,7 +146,8 @@ Finally, a word about your overall philosophy: always wait for user input before
                     server_params = StdioServerParameters(
                         command=VENV_PYTHON,
                         args=[PARSER_SCRIPT],
-                    )
+                    ),
+                    
                 ),
             ),
             McpToolset(
@@ -154,7 +155,8 @@ Finally, a word about your overall philosophy: always wait for user input before
                     server_params = StdioServerParameters(
                         command=VENV_PYTHON,
                         args=[MM_SCRIPT],
-                    )
+                    ),
+                    timeout=120,
                 ),
             ),
         ],

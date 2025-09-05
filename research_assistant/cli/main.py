@@ -90,9 +90,39 @@ def italics_to_bold_safe(text: str) -> str:
     return "\n".join(out)
 
 
+def normalize_paper_list(text: str) -> str:
+    """
+    Cleans up AI-generated paper lists so Rich Markdown renders them well.
+    - Converts "1 Title:" -> "1. **Title:**"
+    - Ensures proper blank lines between papers
+    - Normalizes author/abstract markers
+    """
+    lines = text.splitlines()
+    out = []
+
+    for line in lines:
+        # Normalize numbered papers
+        line = re.sub(r"^\s*(\d+)\s+Title:\s*", r"\1. **Title:** ", line)
+
+        # Make Authors bold
+        line = re.sub(r"\*+Authors:\s*", r"**Authors:** ", line)
+
+        # Make Abstract bold
+        line = re.sub(r"\*+Abstract:\s*", r"**Abstract:** ", line)
+
+        out.append(line.strip())
+
+    # Ensure blank lines between entries
+    normalized = "\n".join(out)
+    normalized = re.sub(r"(\d+\.\s\*\*Title:\*\*.*?)(?=\d+\.\s\*\*Title:\*\*)", r"\1\n", normalized, flags=re.DOTALL)
+
+    return normalized
+
+
 def clean_response(text: str) -> str:
     text = italics_to_bold_safe(text)
     text = format_lists(text)
+    text = normalize_paper_list(text)
     return text
 
 
