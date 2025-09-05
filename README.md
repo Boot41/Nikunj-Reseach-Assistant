@@ -4,6 +4,9 @@ Research-CLI is a powerful set of researching tools designed to help researchers
 
 #Video link 
 https://www.loom.com/share/dcffe2f8d02c482093a27df0318a5057?sid=9691f8ce-c169-4da3-85f0-e36e2dfb8033
+
+#Video 2
+https://www.loom.com/share/f15d19df1aff4f75adfe2e0e78e7dd36?sid=c6a67a45-11dd-4d51-9cfc-9f98c14fe6be
 ## User Stories
 
 -   **Fetch Research Papers:** As a user, I want to fetch research papers directly from the CLI to avoid manual searching.
