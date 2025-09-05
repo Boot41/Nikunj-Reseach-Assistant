@@ -20,9 +20,11 @@ from google.adk.tools.mcp_tool.conversion_utils import adk_to_mcp_tool_type
 from google.genai import Client
 from google import genai
 from google.genai.types import HttpOptions
+
 load_dotenv('/home/nikunjagrwl/Documents/Research-assistant/research_agent')
 
 log_dir = '/home/nikunjagrwl/Documents/Research-assistant/.logs'
+
 os.makedirs(log_dir, exist_ok=True)
 log_file = os.path.join(log_dir, "mindmap_server.log")
 logging.basicConfig(
@@ -35,6 +37,8 @@ logging.basicConfig(
     force=True  # Ensure reconfiguration of logging if already configured
 )
 logger = logging.getLogger() 
+
+MindMapfile = "/home/nikunjagrwl/Documents/Research-assistant/mindmaps/"
 
 server = Server('Mindmap_server')  # 30 second timeout for tool calls
 
@@ -91,12 +95,16 @@ def generate_mindmap_tool(file_path: str):
               "Prerequisites": [...]
           }}
         }}
-
+        
         Paper content:
         {text_content}
         """,
     )
-    response_text = response.text  # works in newer SDK
+    response_text = response.text
+    path = Path(file_path).expanduser().resolve()
+    full_path = os.path.join(MindMapfile, path.stem + "_mindmap.json")
+    with open(full_path, "w") as f:
+        json.dump(response_text, f, indent=2) 
     logger.info(f"Mind map generated successfully")
     return response_text
 
