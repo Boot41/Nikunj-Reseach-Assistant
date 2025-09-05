@@ -62,6 +62,30 @@ async def search_tool(query: str, max_results: int = 10):
         logger.error(f"Error in search_tool: {e}")
         return {"error": str(e), "papers": []}
 
+async def search_more_tool(query: str, max_results: int):
+    logger.info(f"Searching arXiv with query: '{query}', max_results: {max_results}")
+    try:
+        search = arxiv.Search(
+            query=query,
+            max_results=10,
+            sort_by=arxiv.SortCriterion.LastUpdatedDate
+        )
+        results = []
+        for r in search.results():
+            results.append({
+                "title": r.title,
+                "authors": [a.name for a in r.authors],
+                "summary": r.summary,
+                "published": r.published.isoformat(),
+                "arxiv_id": r.get_short_id(),
+                "pdf_url": r.pdf_url,
+            })
+        logger.info(f"Found {len(results)} papers.")
+        return {"papers": results}
+    except Exception as e:
+        logger.error(f"Error in search_tool: {e}")
+        return {"error": str(e), "papers": []}
+
 # --- Tool: Get Abstract ---
 async def read_abstract_tool(arxiv_id: str):
     logger.info(f"Reading abstract for arXiv ID: {arxiv_id}")
@@ -132,6 +156,7 @@ arxiv_tools ={
         "read_abstract_tool": FunctionTool(read_abstract_tool),
         "download_pdf_tool": FunctionTool(download_pdf_tool),
         "list_recent_tool": FunctionTool(list_recent_tool),
+        "search_more_tool": FunctionTool(search_more_tool),
 }
 
 @server.list_tools()

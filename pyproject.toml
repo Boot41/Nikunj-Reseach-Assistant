@@ -34,7 +34,7 @@ dependencies = [
 ]
 
 [project.scripts]
-research-assistant = "research_assistant.cli.main:app"
+reast = "research_assistant.cli.main:app"
 
 [tool.setuptools]
 packages = ["research_assistant"]

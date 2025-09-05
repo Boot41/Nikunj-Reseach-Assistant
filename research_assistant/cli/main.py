@@ -1,5 +1,5 @@
 import asyncio
-import re
+import re, os
 import typer
 import dotenv
 from rich.console import Console
@@ -18,6 +18,22 @@ dotenv.load_dotenv('/home/nikunjagrwl/Documents/Research-assistant/research_assi
 from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner
 from google.genai import types as genai_types
+from google.api_core.exceptions import ResourceExhausted, DeadlineExceeded, ServiceUnavailable
+from mcp import McpError
+import logging
+
+log_dir = '/home/nikunjagrwl/Documents/Research-assistant/.logs'
+os.makedirs(log_dir, exist_ok=True)
+log_file = os.path.join(log_dir, "cli.log")
+logging.basicConfig(
+    level=logging.INFO,                    # Minimum log level
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler(log_file),     # Log to file
+        # logging.StreamHandler()          # Remove StreamHandler to avoid terminal output
+    ]
+)
+logger = logging.getLogger(__name__)
 
 app = typer.Typer()
 console = Console()
@@ -49,6 +65,18 @@ def big_banner():
         )
     )
 
+def handle_agent_error(e: Exception) -> str:
+    """Map ADK / MCP errors to friendly CLI messages."""
+    if isinstance(e, ResourceExhausted):
+        return "System resources exhausted (rate limit or quota hit). Please wait and try again."
+    elif isinstance(e, DeadlineExceeded):
+        return "The request took too long. Try simplifying your query or retrying."
+    elif isinstance(e, ServiceUnavailable):
+        return "The service is temporarily unavailable. Try again later."
+    elif isinstance(e, McpError):
+        return f"A tool failed: {e}"
+    else:
+        return f"Unexpected error: {str(e)}"
 
 def format_lists(text: str) -> str:
     """
@@ -185,8 +213,10 @@ def start_chat_session():
         except (KeyboardInterrupt, EOFError):
             break
         except Exception as e:
+            logger.exception("Error during chat loop")  # logs full traceback to file
+            friendly_message = handle_agent_error(e)
             console.print(
-                Panel(f"[bold red]❌ Error: {str(e)}[/bold red]", border_style="red", box=box.ROUNDED)
+                Panel(f"[bold red]❌ {friendly_message}[/bold red]", border_style="red", box=box.ROUNDED)
             )
 
     console.print(
