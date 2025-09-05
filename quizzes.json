@@ -25,5 +25,49 @@
         "answer": 2
       }
     ]
+  },
+  "Web 3.0 Design and Development for Students": {
+    "questions": [
+      {
+        "question": "What is the primary goal of the paper regarding Web 3.0?",
+        "options": [
+          "To design new Web 3.0 applications for businesses",
+          "To explore the history of the internet",
+          "To bridge the gap between Web 3.0 design/development and student requirements",
+          "To analyze the performance of existing Web 3.0 technologies"
+        ],
+        "answer": 3
+      },
+      {
+        "question": "Which statistical method is used in the paper for modeling student preferences and identifying key attributes in Web 3.0?",
+        "options": [
+          "Linear Regression",
+          "K-Means Clustering",
+          "Discriminant Analysis",
+          "Principal Component Analysis"
+        ],
+        "answer": 2
+      },
+      {
+        "question": "The paper categorizes Web 3.0 attributes into three main groups. What are they?",
+        "options": [
+          "Applications, Media, and Output",
+          "Design, Development, and Testing",
+          "Technical, Social, and Economic",
+          "Artificial Intelligence, Semantic Web, and Blockchain"
+        ],
+        "answer": 1
+      },
+      {
+        "question": "What is the ultimate aim of applying the Maximum Spanning Tree model in the context of the paper?",
+        "options": [
+          "To create a virtual reality experience for students",
+          "To develop new programming languages for Web 3.0",
+          "To predict stock market trends using Web 3.0 data",
+          "To design and develop Web 3.0 software products tailored for students"
+        ],
+        "answer": 4
+      }
+    ]
   }
 }
